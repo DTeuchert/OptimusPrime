@@ -13,7 +13,7 @@ namespace OptimusPrime.Server.Tests.Services
         }
 
         [Fact]
-        public void IsPrime()
+        public void IsNotPrime()
         {
             /* Arrange */
             /* Act */
