@@ -8,11 +8,7 @@ namespace OptimusPrime.Server.Entities
 {
     public class Transformer
     {
-        [Key]
         public string Guid { get; set; }
-
-        [Required]
-        [StringLength(300)]
         public string Name { get; set; }
 
     }

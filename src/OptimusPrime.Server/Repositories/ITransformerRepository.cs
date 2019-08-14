@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OptimusPrime.Server.Services
+namespace OptimusPrime.Server.Repositories
 {
-    interface ITransformerService
+    interface ITransformerRepository
     {
         /// <summary>
         /// Determine whether a transformer exists in the database.
