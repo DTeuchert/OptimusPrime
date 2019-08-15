@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OptimusPrime.Server.Entities;
 using OptimusPrime.Server.Repositories;
+using OptimusPrime.Server.ViewModels;
 
 namespace OptimusPrime.Server.Controllers
 {
@@ -19,21 +21,24 @@ namespace OptimusPrime.Server.Controllers
 
         // GET api/values
         [HttpGet]
-        public async Task<IEnumerable<Transformer>> Get()
+        [ProducesResponseType(200, Type = typeof(IEnumerable<TransformerViewModel>))]
+        public async Task<IEnumerable<TransformerViewModel>> Get()
         {
-            return await _transformerRepository.GetAllAsync();
+            return (await _transformerRepository.GetAllAsync())
+                .Select(transformer => _transformerRepository.ToViewModel(transformer));
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public async Task<Transformer> Get(string guid)
+        [HttpGet("{guid}")]
+        [ProducesResponseType(200, Type = typeof(TransformerViewModel))]
+        public async Task<TransformerViewModel> Get(string guid)
         {
-            return await _transformerRepository.GetAsync(guid);
+            return _transformerRepository.ToViewModel(await _transformerRepository.GetAsync(guid));
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] TransformerViewModel value)
         {
         }
 

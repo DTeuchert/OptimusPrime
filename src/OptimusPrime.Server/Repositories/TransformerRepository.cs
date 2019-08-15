@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using OptimusPrime.Server.Entities;
 using OptimusPrime.Server.Persistences;
+using OptimusPrime.Server.ViewModels;
 
 namespace OptimusPrime.Server.Repositories
 {
@@ -35,6 +36,45 @@ namespace OptimusPrime.Server.Repositories
         {
             return _dbContext
                 .Transformers;
+        }
+
+
+        public async Task AddAsync(Transformer newTransformer)
+        {
+            var exists = await _dbContext.Transformers.AnyAsync(i => i.Guid == newTransformer.Guid);
+            if (!exists)
+            {
+                _dbContext.Transformers.Add(newTransformer);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task EditAsync(Transformer updatedTransformer)
+        {
+            var transformer = await GetAsync(updatedTransformer.Guid);
+            if (transformer is null) { return; }
+
+            if (transformer.Name != updatedTransformer.Name) transformer.Name = updatedTransformer.Name;
+
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(string guid)
+        {
+            var transformer = await GetAsync(guid);
+            if (transformer != null)
+            {
+                _dbContext.Transformers.Remove(transformer);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+        public TransformerViewModel ToViewModel(Transformer transformer)
+        {
+            return new TransformerViewModel
+            {
+                Guid = transformer.Guid,
+                Name = transformer.Name
+            };
         }
 
     }

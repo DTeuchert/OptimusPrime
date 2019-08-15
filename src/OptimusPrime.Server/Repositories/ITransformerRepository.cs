@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using OptimusPrime.Server.Entities;
+using OptimusPrime.Server.ViewModels;
 
 namespace OptimusPrime.Server.Repositories
 {
@@ -32,5 +33,33 @@ namespace OptimusPrime.Server.Repositories
         /// </summary>
         /// <returns></returns>
         IQueryable<Transformer> GetQuery();
+
+        /// <summary>
+        /// Add a transformer in the database.
+        /// </summary>
+        /// <param name="newTransformer">New transformer to store in the database</param>
+        /// <returns></returns>
+        Task AddAsync(Transformer newTransformer);
+
+        /// <summary>
+        /// Update a transformer object in the database.
+        /// </summary>
+        /// <param name="updatedTransformer">Updated transformer</param>
+        /// <returns></returns>
+        Task EditAsync(Transformer updatedTransformer);
+
+        /// <summary>
+        /// Deletes a transformer from the database.
+        /// </summary>
+        /// <param name="guid">Global unique identifier of the transformer</param>
+        /// <returns></returns>
+        Task DeleteAsync(string guid);
+
+        /// <summary>
+        /// Converts a transformer entity into a viewmodel.
+        /// </summary>
+        /// <param name="transformer">Transformer entity</param>
+        /// <returns></returns>
+        TransformerViewModel ToViewModel(Transformer transformer);
     }
 }
