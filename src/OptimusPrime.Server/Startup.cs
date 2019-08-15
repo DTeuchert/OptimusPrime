@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace OptimusPrime.Server
 {
@@ -26,18 +22,14 @@ namespace OptimusPrime.Server
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
 
-            //if (env.IsDevelopment())
-            //{
-            //    builder.AddUserSecrets<Startup>();
-            //}
-
             Configuration = builder.Build();
         }
 
         /* This method gets called by the runtime. Use this method to add services to the container. */
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<Persistences.OptimusPrimeDbContext>(options => {
+            services.AddDbContext<Persistences.OptimusPrimeDbContext>(options =>
+            {
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
 
@@ -65,7 +57,7 @@ namespace OptimusPrime.Server
 
             if (true)//options.RunMigrationsAtStartup)
             {
-                // Applying database migrations.
+                /* Applying database migrations. */
                 using (var scope = app.ApplicationServices.CreateScope())
                 {
                     var services = scope.ServiceProvider;
@@ -94,10 +86,11 @@ namespace OptimusPrime.Server
         {
             var db = services.GetService<Persistences.OptimusPrimeDbContext>();
             var migrations = db.Database.GetPendingMigrations().ToList();
-            if (migrations.Count() > 0)
+            if (migrations.Count > 0)
             {
-                Extensions.ConsoleExtension.PrintLine($"Running pending {migrations.Count()} migrations:", ConsoleColor.White, ConsoleColor.Red);
-                migrations.ForEach(migration => {
+                Extensions.ConsoleExtension.PrintLine($"Running pending {migrations.Count} migrations:", ConsoleColor.White, ConsoleColor.Red);
+                migrations.ForEach(migration =>
+                {
                     Extensions.ConsoleExtension.PrintLine($" - {migration}", ConsoleColor.Red);
                 });
                 db.Database.Migrate();

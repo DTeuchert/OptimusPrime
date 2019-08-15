@@ -1,6 +1,6 @@
-﻿using OptimusPrime.Server.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using OptimusPrime.Server.Entities;
 
 namespace OptimusPrime.Server.Persistences.Configurations
 {

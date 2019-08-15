@@ -1,15 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{149DB8A3-C208-47A9-908E-D49296EA21F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimusPrime.Server.Tests", "test\OptimusPrime.Server.Tests\OptimusPrime.Server.Tests.csproj", "{90E64DC3-9CC9-47A4-9231-57C548057406}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptimusPrime.Server.Tests", "test\OptimusPrime.Server.Tests\OptimusPrime.Server.Tests.csproj", "{90E64DC3-9CC9-47A4-9231-57C548057406}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7DEF9DEA-2720-4333-9E87-4ED1ECF1214D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimusPrime.Server", "src\OptimusPrime.Server\OptimusPrime.Server.csproj", "{8A39C9B3-D775-4663-AFAA-02F57FF90D90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptimusPrime.Server", "src\OptimusPrime.Server\OptimusPrime.Server.csproj", "{8A39C9B3-D775-4663-AFAA-02F57FF90D90}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A12B815A-8601-4804-99C0-52AF3A644E1F}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,11 +34,11 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {82741175-1AC1-42E5-BCBD-46C5B20E1B38}
-	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{90E64DC3-9CC9-47A4-9231-57C548057406} = {149DB8A3-C208-47A9-908E-D49296EA21F0}
 		{8A39C9B3-D775-4663-AFAA-02F57FF90D90} = {7DEF9DEA-2720-4333-9E87-4ED1ECF1214D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {82741175-1AC1-42E5-BCBD-46C5B20E1B38}
 	EndGlobalSection
 EndGlobal

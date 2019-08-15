@@ -1,4 +1,4 @@
-namespace OptimusPrime.Server.Services
+﻿namespace OptimusPrime.Server.Services
 {
     public interface IPrimeService
     {

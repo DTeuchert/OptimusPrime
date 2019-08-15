@@ -1,6 +1,6 @@
+﻿using Moq;
 using OptimusPrime.Server.Services;
 using Xunit;
-using Moq;
 
 namespace OptimusPrime.Server.Tests.Services
 {

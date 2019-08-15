@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using OptimusPrime.Server.Entities;
 using OptimusPrime.Server.Persistences.Extensions;
-using System;
 
 namespace OptimusPrime.Server.Persistences
 {
