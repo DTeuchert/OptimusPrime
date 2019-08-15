@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using OptimusPrime.Server.Entities;
 using OptimusPrime.Server.Persistences;
 
 namespace OptimusPrime.Server.Repositories
@@ -17,5 +20,22 @@ namespace OptimusPrime.Server.Repositories
         {
             return await _dbContext.Transformers.AnyAsync(x => x.Name == name);
         }
+
+        public async Task<IEnumerable<Transformer>> GetAllAsync()
+        {
+            return await GetQuery().ToListAsync();
+        }
+
+        public async Task<Transformer> GetAsync(string guid)
+        {
+            return await GetQuery().SingleAsync(x => x.Guid == guid);
+        }
+
+        public IQueryable<Transformer> GetQuery()
+        {
+            return _dbContext
+                .Transformers;
+        }
+
     }
 }

@@ -1,32 +1,34 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using OptimusPrime.Server.Services;
+using OptimusPrime.Server.Entities;
+using OptimusPrime.Server.Repositories;
 
 namespace OptimusPrime.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class TransformerController : Controller
     {
-        private readonly IPrimeService _primeService;
+        private readonly ITransformerRepository _transformerRepository;
 
-        public ValuesController(IPrimeService primeService)
+        public TransformerController(ITransformerRepository transformerRepository)
         {
-            _primeService = primeService;
+            _transformerRepository = transformerRepository;
         }
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<IEnumerable<Transformer>> Get()
         {
-            return new string[] { "value1", "value2" };
+            return await _transformerRepository.GetAllAsync();
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public async Task<Transformer> Get(string guid)
         {
-            return "value";
+            return await _transformerRepository.GetAsync(guid);
         }
 
         // POST api/values

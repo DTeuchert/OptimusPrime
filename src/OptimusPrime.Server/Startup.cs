@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Linq;
+using GraphQL;
+using GraphQL.Server;
+using GraphQL.Server.Ui.Playground;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using OptimusPrime.Server.GraphQL;
 
 namespace OptimusPrime.Server
 {
@@ -28,10 +32,25 @@ namespace OptimusPrime.Server
         /* This method gets called by the runtime. Use this method to add services to the container. */
         public void ConfigureServices(IServiceCollection services)
         {
+            #region Database
             services.AddDbContext<Persistences.OptimusPrimeDbContext>(options =>
-            {
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
-            });
+                {
+                    options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+                });
+            #endregion
+
+            #region GraphQL
+            services.AddScoped<IDependencyResolver>(x => new FuncDependencyResolver(x.GetRequiredService));
+            services.AddScoped<OptimusPrimeSchema>();
+            services.AddGraphQL(option =>
+                {
+                    option.ExposeExceptions = true; //set true only in development mode. make it switchable.)
+                })
+                .AddGraphTypes(ServiceLifetime.Scoped)
+                .AddUserContextBuilder(httpContext => httpContext.User)
+                .AddDataLoader();
+
+            #endregion
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
@@ -73,6 +92,9 @@ namespace OptimusPrime.Server
                 }
             }
 
+
+            app.UseGraphQL<OptimusPrimeSchema>();
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions()); //to explorer API navigate https://*DOMAIN*/ui/playground
 
             app.UseHttpsRedirection();
             app.UseMvc();
