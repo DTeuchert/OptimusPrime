@@ -11,6 +11,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using OptimusPrime.Server.GraphQL;
+using OptimusPrime.Server.Extensions;
+using Microsoft.Extensions.Options;
+using OptimusPrime.Server.Configuration.Options;
 
 namespace OptimusPrime.Server
 {
@@ -18,24 +21,21 @@ namespace OptimusPrime.Server
     {
         public IConfiguration Configuration { get; }
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-
-            Configuration = builder.Build();
+            Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         /* This method gets called by the runtime. Use this method to add services to the container. */
         public void ConfigureServices(IServiceCollection services)
-        {
+        {           
+            services.ConfigureOptimusPrime(Configuration);
+
             #region Database
-            services.AddDbContext<Persistences.OptimusPrimeDbContext>(options =>
+            services.AddDbContext<Persistences.OptimusPrimeDbContext>((provider, options) =>
                 {
-                    options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+                    var databaseOptions = provider.GetRequiredService<IOptionsSnapshot<DatabaseOptions>>();
+                    options.UseSqlite(databaseOptions.Value.ConnectionString);
                 });
             #endregion
 
@@ -49,7 +49,6 @@ namespace OptimusPrime.Server
                 .AddGraphTypes(ServiceLifetime.Scoped)
                 .AddUserContextBuilder(httpContext => httpContext.User)
                 .AddDataLoader();
-
             #endregion
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -71,10 +70,8 @@ namespace OptimusPrime.Server
                 app.UseHsts();
             }
 
-            //TODO Set options
-            // var options = Configuration.Get<OtimusPrimeOptions>();
-
-            if (true)//options.RunMigrationsAtStartup)
+            var options = Configuration.Get<OptimusPrimeOptions>();
+            if (options.RunMigrationsAtStartup)
             {
                 /* Applying database migrations. */
                 using (var scope = app.ApplicationServices.CreateScope())
@@ -91,7 +88,6 @@ namespace OptimusPrime.Server
                     }
                 }
             }
-
 
             app.UseGraphQL<OptimusPrimeSchema>();
             app.UseGraphQLPlayground(new GraphQLPlaygroundOptions()); //to explorer API navigate https://*DOMAIN*/ui/playground
