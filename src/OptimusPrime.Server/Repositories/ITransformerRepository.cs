@@ -46,7 +46,7 @@ namespace OptimusPrime.Server.Repositories
         /// </summary>
         /// <param name="updatedTransformer">Updated transformer</param>
         /// <returns></returns>
-        Task EditAsync(Transformer updatedTransformer);
+        Task UpdateAsync(Transformer updatedTransformer);
 
         /// <summary>
         /// Deletes a transformer from the database.

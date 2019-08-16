@@ -1,16 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OptimusPrime.Server.Entities;
 using OptimusPrime.Server.Repositories;
-using OptimusPrime.Server.ViewModels;
 
 namespace OptimusPrime.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TransformerController : Controller
+    public class TransformerController : ControllerBase
     {
         private readonly ITransformerRepository _transformerRepository;
 
@@ -21,37 +19,57 @@ namespace OptimusPrime.Server.Controllers
 
         // GET api/values
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<TransformerViewModel>))]
-        public async Task<IEnumerable<TransformerViewModel>> Get()
+        public async Task<IEnumerable<Transformer>> Get()
         {
-            return (await _transformerRepository.GetAllAsync())
-                .Select(transformer => _transformerRepository.ToViewModel(transformer));
+            return await _transformerRepository.GetAllAsync();
         }
 
         // GET api/values/5
         [HttpGet("{guid}")]
-        [ProducesResponseType(200, Type = typeof(TransformerViewModel))]
-        public async Task<TransformerViewModel> Get(string guid)
+        public async Task<ActionResult<Transformer>> Get(string guid)
         {
-            return _transformerRepository.ToViewModel(await _transformerRepository.GetAsync(guid));
+            var transformer = await _transformerRepository.GetAsync(guid);
+
+            if (transformer is null)
+            {
+                return NotFound();
+            }
+            return transformer;
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] TransformerViewModel value)
+        public async Task<ActionResult<Transformer>> Create([FromBody] Transformer transformer)
         {
+            await _transformerRepository.AddAsync(transformer);
+            return CreatedAtAction(nameof(Get), new { transformer.Guid }, transformer);
         }
 
         // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{guid}")]
+        public async Task<ActionResult> Update(string guid, [FromBody] Transformer transformer)
         {
+            if (guid != transformer.Guid)
+            {
+                return BadRequest();
+            }
+
+            await _transformerRepository.UpdateAsync(transformer);
+            return NoContent();
         }
 
         // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{guid}")]
+        public async Task<IActionResult> Delete(string guid)
         {
+            var transformer = await _transformerRepository.GetAsync(guid);
+            if (transformer == null)
+            {
+                return NotFound();
+            }
+
+            await _transformerRepository.DeleteAsync(transformer.Guid);
+            return NoContent();
         }
     }
 }

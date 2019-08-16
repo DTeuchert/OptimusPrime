@@ -10,10 +10,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using OptimusPrime.Server.GraphQL;
-using OptimusPrime.Server.Extensions;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using OptimusPrime.Server.Configuration.Options;
+using OptimusPrime.Server.Extensions;
+using OptimusPrime.Server.GraphQL;
 
 namespace OptimusPrime.Server
 {
@@ -28,7 +29,7 @@ namespace OptimusPrime.Server
 
         /* This method gets called by the runtime. Use this method to add services to the container. */
         public void ConfigureServices(IServiceCollection services)
-        {           
+        {
             services.ConfigureOptimusPrime(Configuration);
 
             #region Database
@@ -53,6 +54,11 @@ namespace OptimusPrime.Server
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "OptimusPrime API", Version = "v1" });
+            });
+
             services.AddScoped<Repositories.ITransformerRepository, Repositories.TransformerRepository>();
             services.AddScoped<Services.IPrimeService, Services.PrimeService>();
         }
@@ -69,7 +75,7 @@ namespace OptimusPrime.Server
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            #region Migrations
             var options = Configuration.Get<OptimusPrimeOptions>();
             if (options.RunMigrationsAtStartup)
             {
@@ -88,9 +94,16 @@ namespace OptimusPrime.Server
                     }
                 }
             }
+            #endregion
 
             app.UseGraphQL<OptimusPrimeSchema>();
             app.UseGraphQLPlayground(new GraphQLPlaygroundOptions()); //to explorer API navigate https://*DOMAIN*/ui/playground
+
+            app.UseSwagger();
+            app.UseSwaggerUI(config =>
+            {
+                config.SwaggerEndpoint("/swagger/v1/swagger.json", "OptimusPrime API V1");
+            });
 
             app.UseHttpsRedirection();
             app.UseMvc();
@@ -106,17 +119,17 @@ namespace OptimusPrime.Server
             var migrations = db.Database.GetPendingMigrations().ToList();
             if (migrations.Count > 0)
             {
-                Extensions.ConsoleExtension.PrintLine($"Running pending {migrations.Count} migrations:", ConsoleColor.White, ConsoleColor.Red);
+                ConsoleExtension.PrintLine($"Running pending {migrations.Count} migrations:", ConsoleColor.White, ConsoleColor.Red);
                 migrations.ForEach(migration =>
                 {
-                    Extensions.ConsoleExtension.PrintLine($" - {migration}", ConsoleColor.Red);
+                    ConsoleExtension.PrintLine($" - {migration}", ConsoleColor.Red);
                 });
                 db.Database.Migrate();
-                Extensions.ConsoleExtension.PrintLine("Migration process done!", ConsoleColor.White, ConsoleColor.Red);
+                ConsoleExtension.PrintLine("Migration process done!", ConsoleColor.White, ConsoleColor.Red);
             }
             else
             {
-                Extensions.ConsoleExtension.PrintLine("No migrations pending!", ConsoleColor.White, ConsoleColor.Red);
+                ConsoleExtension.PrintLine("No migrations pending!", ConsoleColor.White, ConsoleColor.Red);
             }
         }
     }

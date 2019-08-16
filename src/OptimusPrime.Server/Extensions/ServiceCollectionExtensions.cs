@@ -1,8 +1,8 @@
-using OptimusPrime.Server.Configuration;
-using OptimusPrime.Server.Configuration.Options;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using OptimusPrime.Server.Configuration;
+using OptimusPrime.Server.Configuration.Options;
 
 namespace OptimusPrime.Server.Extensions
 {
@@ -14,7 +14,7 @@ namespace OptimusPrime.Server.Extensions
         {
             services.ConfigureAndValidate<OptimusPrimeOptions>(configuration);
             services.ConfigureAndValidate<DatabaseOptions>(configuration.GetSection(nameof(OptimusPrimeOptions.Database)));
-   
+
             return services;
         }
 
@@ -27,6 +27,6 @@ namespace OptimusPrime.Server.Extensions
             services.AddSingleton<IPostConfigureOptions<TOptions>, ValidatePostConfigureOptions<TOptions>>();
 
             return services;
-        }    
+        }
     }
 }

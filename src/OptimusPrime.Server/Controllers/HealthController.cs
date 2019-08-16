@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using OptimusPrime.Server.Entities;
-using OptimusPrime.Server.Repositories;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace OptimusPrime.Server.Controllers
 {

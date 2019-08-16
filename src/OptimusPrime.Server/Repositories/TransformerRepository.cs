@@ -49,7 +49,7 @@ namespace OptimusPrime.Server.Repositories
             }
         }
 
-        public async Task EditAsync(Transformer updatedTransformer)
+        public async Task UpdateAsync(Transformer updatedTransformer)
         {
             var transformer = await GetAsync(updatedTransformer.Guid);
             if (transformer is null) { return; }
