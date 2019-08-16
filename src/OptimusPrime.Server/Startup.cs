@@ -33,6 +33,8 @@ namespace OptimusPrime.Server
             services.ConfigureOptimusPrime(Configuration);
 
             #region Database
+            services.AddHealthChecks()
+                .AddDbContextCheck<Persistences.OptimusPrimeDbContext>();
             services.AddDbContext<Persistences.OptimusPrimeDbContext>((provider, options) =>
                 {
                     var databaseOptions = provider.GetRequiredService<IOptionsSnapshot<DatabaseOptions>>();
@@ -104,6 +106,8 @@ namespace OptimusPrime.Server
             {
                 config.SwaggerEndpoint("/swagger/v1/swagger.json", "OptimusPrime API V1");
             });
+
+            app.UseHealthChecks("/ready");
 
             app.UseHttpsRedirection();
             app.UseMvc();

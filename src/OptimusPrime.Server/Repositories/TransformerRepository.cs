@@ -32,6 +32,11 @@ namespace OptimusPrime.Server.Repositories
             return await GetQuery().SingleAsync(x => x.Guid == guid);
         }
 
+        public async Task<Transformer> GetByNameAsync(string name)
+        {
+            return await GetQuery().SingleAsync(x => x.Name == name);
+        }
+
         public IQueryable<Transformer> GetQuery()
         {
             return _dbContext

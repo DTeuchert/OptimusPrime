@@ -29,6 +29,14 @@ namespace OptimusPrime.Server.Repositories
         Task<Transformer> GetAsync(string guid);
 
         /// <summary>
+        /// Return a transformers object identified by its name.
+        /// </summary>
+        /// <param name="name">Name of the transformer</param>
+        /// <returns>Transformer object with the name.</returns>
+        Task<Transformer> GetByNameAsync(string name);
+
+
+        /// <summary>
         /// Returns a Transformer query.
         /// </summary>
         /// <returns></returns>
