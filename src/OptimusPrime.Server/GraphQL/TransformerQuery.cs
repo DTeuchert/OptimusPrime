@@ -9,6 +9,19 @@ namespace OptimusPrime.Server.GraphQL
 {
     public class TransformerQuery : ObjectGraphType
     {
+        /* --- Simple test query
+         query TestQuery {
+            transformers {
+                guid, 
+                name, 
+                alliance, 
+                category {
+                    name
+                }
+            }
+         }
+         */
+
         public TransformerQuery(ITransformerRepository transformerRepository)
         {
             Field<ListGraphType<TransformerType>>(
