@@ -16,7 +16,8 @@ namespace OptimusPrime.Server.GraphQL
                 arguments: new QueryArguments(new List<QueryArgument>
                 {
                     new QueryArgument<IdGraphType> { Name = "guid" },
-                    new QueryArgument<StringGraphType> { Name = "name" }
+                    new QueryArgument<StringGraphType> { Name = "name" },
+                    //new QueryArgument<AllianceType> { Name = "alliance" }
                 }),
                 resolve: context =>
                 {
@@ -28,14 +29,20 @@ namespace OptimusPrime.Server.GraphQL
                     var transformerGuid = context.GetArgument<string>("guid");
                     if (!string.IsNullOrEmpty(transformerGuid))
                     {
-                        return transformerRepository.GetQuery().Where(x => x.Guid == transformerGuid);
+                        return transformerRepository.GetAsync(transformerGuid);
                     }
 
                     var transformerName = context.GetArgument<string>("name");
                     if (!string.IsNullOrEmpty(transformerName))
                     {
-                        return transformerRepository.GetQuery().Where(x => x.Name == transformerName);
+                        return transformerRepository.GetByNameAsync(transformerName);
                     }
+
+                    //var transformerAlliance = context.GetArgument<AllianceType?>("alliance");
+                    //if (transformerAlliance.HasValue)
+                    //{
+                    //    return transformerRepository.GetQuery().Where(x => x.Alliance == transformerAlliance.Value);
+                    //}
 
                     return query.ToList();
                 }

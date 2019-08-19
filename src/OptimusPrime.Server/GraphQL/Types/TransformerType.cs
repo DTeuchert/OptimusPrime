@@ -7,10 +7,11 @@ namespace OptimusPrime.Server.GraphQL.Types
     {
         public TransformerType()
         {
-            Field(x => x.Guid)
-                .Description("Guid of the transformer");
+            Field(x => x.Guid);
             Field(x => x.Name)
                 .Description("Name of the transformer");
+            Field<AllianceType>(nameof(Transformer.Alliance));
+            Field<CategoryType>(nameof(Transformer.Category));
         }
     }
 }

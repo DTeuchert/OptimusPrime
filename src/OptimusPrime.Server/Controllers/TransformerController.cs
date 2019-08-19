@@ -30,6 +30,7 @@ namespace OptimusPrime.Server.Controllers
 
         // GET api/values/5
         [HttpGet("{guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TransformerViewModel>> Get(string guid)
         {
@@ -58,7 +59,7 @@ namespace OptimusPrime.Server.Controllers
 
         // PUT api/values/5
         [HttpPut("{guid}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Update(string guid, [FromBody] TransformerViewModel transformer)
@@ -84,7 +85,7 @@ namespace OptimusPrime.Server.Controllers
 
         // DELETE api/values/5
         [HttpDelete("{guid}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(string guid)
         {

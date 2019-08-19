@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using OptimusPrime.Server.Entities;
 using OptimusPrime.Server.Persistences;
-using OptimusPrime.Server.ViewModels;
 
 namespace OptimusPrime.Server.Repositories
 {
@@ -37,12 +37,11 @@ namespace OptimusPrime.Server.Repositories
             return await GetQuery().SingleAsync(x => x.Name == name);
         }
 
-        public IQueryable<Transformer> GetQuery()
+        public IIncludableQueryable<Transformer, Category> GetQuery()
         {
-            return _dbContext
-                .Transformers;
+            return _dbContext.Transformers
+                .Include(t => t.Category);
         }
-
 
         public async Task AddAsync(Transformer newTransformer)
         {
@@ -60,6 +59,8 @@ namespace OptimusPrime.Server.Repositories
             if (transformer is null) { return; }
 
             if (transformer.Name != updatedTransformer.Name) transformer.Name = updatedTransformer.Name;
+            //if (transformer.Alliance != updatedTransformer.Alliance) transformer.Alliance = updatedTransformer.Alliance;
+            //if (transformer.CategoryId != updatedTransformer.CategoryId) transformer.CategoryId = updatedTransformer.CategoryId;
 
             await _dbContext.SaveChangesAsync();
         }
@@ -73,14 +74,5 @@ namespace OptimusPrime.Server.Repositories
                 await _dbContext.SaveChangesAsync();
             }
         }
-        public TransformerViewModel ToViewModel(Transformer transformer)
-        {
-            return new TransformerViewModel
-            {
-                Guid = transformer.Guid,
-                Name = transformer.Name
-            };
-        }
-
     }
 }

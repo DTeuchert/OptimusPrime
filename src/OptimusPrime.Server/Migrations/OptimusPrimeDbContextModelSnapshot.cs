@@ -15,11 +15,37 @@ namespace OptimusPrime.Server.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
+            modelBuilder.Entity("OptimusPrime.Server.Entities.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Category");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Main Autobots"
+                        });
+                });
+
             modelBuilder.Entity("OptimusPrime.Server.Entities.Transformer", b =>
                 {
                     b.Property<string>("Guid")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(36);
+
+                    b.Property<string>("Alliance")
+                        .IsRequired();
+
+                    b.Property<int>("CategoryId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -27,14 +53,26 @@ namespace OptimusPrime.Server.Migrations
 
                     b.HasKey("Guid");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Transformers");
 
                     b.HasData(
                         new
                         {
-                            Guid = "96543483-7f27-445f-a30b-08b11248afe9",
+                            Guid = "d91e068b-6708-41d5-8fb7-da03f7bdf1db",
+                            Alliance = "Autobot",
+                            CategoryId = 1,
                             Name = "Bumblebee"
                         });
+                });
+
+            modelBuilder.Entity("OptimusPrime.Server.Entities.Transformer", b =>
+                {
+                    b.HasOne("OptimusPrime.Server.Entities.Category", "Category")
+                        .WithMany("Transformers")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

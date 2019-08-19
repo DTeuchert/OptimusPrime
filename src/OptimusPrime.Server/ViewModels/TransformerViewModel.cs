@@ -6,6 +6,9 @@ namespace OptimusPrime.Server.ViewModels
     {
         public string Guid { get; set; }
         public string Name { get; set; }
+        public Alliance Alicance { get; set; }
+        public CategoryViewModel Category { get; set; }
+
     }
 
     public static class TransformerViewModelExtensions
@@ -15,7 +18,9 @@ namespace OptimusPrime.Server.ViewModels
             return new TransformerViewModel
             {
                 Guid = x.Guid,
-                Name = x.Name
+                Name = x.Name,
+                Alicance = x.Alliance,
+                Category = x.Category.ToViewModel() ?? new CategoryViewModel()
             };
         }
     }
