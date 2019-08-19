@@ -32,7 +32,72 @@ namespace OptimusPrime.Server.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Main Autobots"
+                            Name = "Main"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Autobot Cars"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Mini-Bots"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Dinobots"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Aerialbots"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Protectobots"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Female Autobots"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Technobots"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Throttlebots"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Targetmasters"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Headmasters"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Clonebots"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "Junkions"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Name = "Others"
                         });
                 });
 
@@ -60,10 +125,31 @@ namespace OptimusPrime.Server.Migrations
                     b.HasData(
                         new
                         {
-                            Guid = "d91e068b-6708-41d5-8fb7-da03f7bdf1db",
+                            Guid = "bd0a9655-d11e-4537-a8c8-65faec607c24",
+                            Alliance = "Autobot",
+                            CategoryId = 1,
+                            Name = "Optimus Prime"
+                        },
+                        new
+                        {
+                            Guid = "2d78c5bd-0747-4c0e-9e4a-a7b4678facc9",
                             Alliance = "Autobot",
                             CategoryId = 1,
                             Name = "Bumblebee"
+                        },
+                        new
+                        {
+                            Guid = "f261f281-db91-4be2-8acb-feb5c4f3413a",
+                            Alliance = "Autobot",
+                            CategoryId = 1,
+                            Name = "Cliffjumper"
+                        },
+                        new
+                        {
+                            Guid = "d1abf070-a87f-4c0b-aa5f-f6a108e6ba87",
+                            Alliance = "Decepticon",
+                            CategoryId = 1,
+                            Name = "Megatron"
                         });
                 });
 

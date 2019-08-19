@@ -34,8 +34,6 @@ namespace OptimusPrime.Server.GraphQL
                 }),
                 resolve: context =>
                 {
-
-                    var query = transformerRepository.GetQuery();
                     var user = (ClaimsPrincipal)context.UserContext;
                     var isUserAuthenticated = ((ClaimsIdentity)user.Identity).IsAuthenticated;
 
@@ -51,13 +49,13 @@ namespace OptimusPrime.Server.GraphQL
                         return transformerRepository.GetByNameAsync(transformerName);
                     }
 
-                    //var transformerAlliance = context.GetArgument<AllianceType?>("alliance");
-                    //if (transformerAlliance.HasValue)
+                    //var transformerAlliance = context.GetArgument<AllianceType>("alliance");
+                    //if (transformerAlliance != null)
                     //{
-                    //    return transformerRepository.GetQuery().Where(x => x.Alliance == transformerAlliance.Value);
+                    //    return transformerRepository.GetQuery().Where(x => x.Alliance == transformerAlliance.);
                     //}
 
-                    return query.ToList();
+                    return transformerRepository.GetAllAsync();
                 }
             );
         }
