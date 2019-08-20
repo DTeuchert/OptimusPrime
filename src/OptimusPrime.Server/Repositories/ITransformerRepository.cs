@@ -15,6 +15,13 @@ namespace OptimusPrime.Server.Repositories
         Task<bool> ExistsAsync(string name);
 
         /// <summary>
+        /// Determine whether a category exists in the database.
+        /// </summary>
+        /// <param name="id">Id of the category </param>
+        /// <returns>Whether the category exists in the database.</returns>
+        Task<bool> ExistsCategoryAsync(int id);
+
+        /// <summary>
         /// Return all transformers stored in the database.
         /// </summary>
         /// <returns>List of all stored transformer exists in the database.</returns>

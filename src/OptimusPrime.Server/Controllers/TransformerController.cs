@@ -47,12 +47,20 @@ namespace OptimusPrime.Server.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TransformerViewModel>> Create([FromBody] TransformerViewModel transformer)
         {
+            if(! await _transformerRepository.ExistsCategoryAsync(transformer.Category.Id))
+            {
+                return NotFound();
+            }
+
             await _transformerRepository.AddAsync(new Transformer
             {
                 Guid = transformer.Guid,
-                Name = transformer.Name
+                Name = transformer.Name,
+                Alliance = transformer.Allicance,
+                CategoryId = transformer.Category.Id
             });
             return CreatedAtAction(nameof(Get), new { transformer.Guid }, transformer);
         }
@@ -69,6 +77,11 @@ namespace OptimusPrime.Server.Controllers
                 return BadRequest();
             }
 
+            if (!await _transformerRepository.ExistsCategoryAsync(transformer.Category.Id))
+            {
+                return NotFound();
+            }
+
             var transformerModel = await _transformerRepository.GetAsync(guid);
             if (transformerModel == null)
             {
@@ -78,7 +91,9 @@ namespace OptimusPrime.Server.Controllers
             await _transformerRepository.UpdateAsync(new Transformer
             {
                 Guid = transformer.Guid,
-                Name = transformer.Name
+                Name = transformer.Name,
+                Alliance = transformer.Allicance,
+                CategoryId = transformer.Category.Id
             });
             return NoContent();
         }

@@ -8,6 +8,7 @@ namespace OptimusPrime.Server.Persistences
 {
     public class OptimusPrimeDbContext : DbContext
     {
+        public DbSet<Category> Categories { get; set; }
         public DbSet<Transformer> Transformers { get; set; }
 
         public OptimusPrimeDbContext(DbContextOptions<OptimusPrimeDbContext> options) : base(options)

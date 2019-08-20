@@ -7,7 +7,7 @@ namespace OptimusPrime.Server.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Category",
+                name: "Categories",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -16,7 +16,7 @@ namespace OptimusPrime.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Category", x => x.Id);
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -32,102 +32,102 @@ namespace OptimusPrime.Server.Migrations
                 {
                     table.PrimaryKey("PK_Transformers", x => x.Guid);
                     table.ForeignKey(
-                        name: "FK_Transformers_Category_CategoryId",
+                        name: "FK_Transformers_Categories_CategoryId",
                         column: x => x.CategoryId,
-                        principalTable: "Category",
+                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
-                table: "Category",
+                table: "Categories",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 1, "Main" });
 
             migrationBuilder.InsertData(
-                table: "Category",
+                table: "Categories",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 2, "Autobot Cars" });
 
             migrationBuilder.InsertData(
-                table: "Category",
+                table: "Categories",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 3, "Mini-Bots" });
 
             migrationBuilder.InsertData(
-                table: "Category",
+                table: "Categories",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 4, "Dinobots" });
 
             migrationBuilder.InsertData(
-                table: "Category",
+                table: "Categories",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 5, "Aerialbots" });
 
             migrationBuilder.InsertData(
-                table: "Category",
+                table: "Categories",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 6, "Protectobots" });
 
             migrationBuilder.InsertData(
-                table: "Category",
+                table: "Categories",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 7, "Female Autobots" });
 
             migrationBuilder.InsertData(
-                table: "Category",
+                table: "Categories",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 8, "Technobots" });
 
             migrationBuilder.InsertData(
-                table: "Category",
+                table: "Categories",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 9, "Throttlebots" });
 
             migrationBuilder.InsertData(
-                table: "Category",
+                table: "Categories",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 10, "Targetmasters" });
 
             migrationBuilder.InsertData(
-                table: "Category",
+                table: "Categories",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 11, "Headmasters" });
 
             migrationBuilder.InsertData(
-                table: "Category",
+                table: "Categories",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 12, "Clonebots" });
 
             migrationBuilder.InsertData(
-                table: "Category",
+                table: "Categories",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 13, "Junkions" });
 
             migrationBuilder.InsertData(
-                table: "Category",
+                table: "Categories",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 14, "Others" });
 
             migrationBuilder.InsertData(
                 table: "Transformers",
                 columns: new[] { "Guid", "Alliance", "CategoryId", "Name" },
-                values: new object[] { "bd0a9655-d11e-4537-a8c8-65faec607c24", "Autobot", 1, "Optimus Prime" });
+                values: new object[] { "35d663b8-e087-4e4e-8cae-fc31258f7c99", "Autobot", 1, "Optimus Prime" });
 
             migrationBuilder.InsertData(
                 table: "Transformers",
                 columns: new[] { "Guid", "Alliance", "CategoryId", "Name" },
-                values: new object[] { "2d78c5bd-0747-4c0e-9e4a-a7b4678facc9", "Autobot", 1, "Bumblebee" });
+                values: new object[] { "8a185940-0f60-46bd-97bd-9f122662fb85", "Autobot", 1, "Bumblebee" });
 
             migrationBuilder.InsertData(
                 table: "Transformers",
                 columns: new[] { "Guid", "Alliance", "CategoryId", "Name" },
-                values: new object[] { "f261f281-db91-4be2-8acb-feb5c4f3413a", "Autobot", 1, "Cliffjumper" });
+                values: new object[] { "faaddd1b-92d7-47ac-b7d6-13be803ca63c", "Autobot", 1, "Cliffjumper" });
 
             migrationBuilder.InsertData(
                 table: "Transformers",
                 columns: new[] { "Guid", "Alliance", "CategoryId", "Name" },
-                values: new object[] { "d1abf070-a87f-4c0b-aa5f-f6a108e6ba87", "Decepticon", 1, "Megatron" });
+                values: new object[] { "d5a1b9ce-3e63-4188-be5c-d3f640eded2e", "Decepticon", 1, "Megatron" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transformers_CategoryId",
@@ -141,7 +141,7 @@ namespace OptimusPrime.Server.Migrations
                 name: "Transformers");
 
             migrationBuilder.DropTable(
-                name: "Category");
+                name: "Categories");
         }
     }
 }

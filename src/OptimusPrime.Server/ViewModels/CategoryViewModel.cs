@@ -16,7 +16,7 @@ namespace OptimusPrime.Server.ViewModels
             return new CategoryViewModel
             {
                 Id = x.Id,
-                Name = x.Name
+                Name = x.Name,
             };
         }
     }

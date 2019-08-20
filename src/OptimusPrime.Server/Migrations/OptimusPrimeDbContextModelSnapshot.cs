@@ -26,7 +26,7 @@ namespace OptimusPrime.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
 
                     b.HasData(
                         new
@@ -125,28 +125,28 @@ namespace OptimusPrime.Server.Migrations
                     b.HasData(
                         new
                         {
-                            Guid = "bd0a9655-d11e-4537-a8c8-65faec607c24",
+                            Guid = "35d663b8-e087-4e4e-8cae-fc31258f7c99",
                             Alliance = "Autobot",
                             CategoryId = 1,
                             Name = "Optimus Prime"
                         },
                         new
                         {
-                            Guid = "2d78c5bd-0747-4c0e-9e4a-a7b4678facc9",
+                            Guid = "8a185940-0f60-46bd-97bd-9f122662fb85",
                             Alliance = "Autobot",
                             CategoryId = 1,
                             Name = "Bumblebee"
                         },
                         new
                         {
-                            Guid = "f261f281-db91-4be2-8acb-feb5c4f3413a",
+                            Guid = "faaddd1b-92d7-47ac-b7d6-13be803ca63c",
                             Alliance = "Autobot",
                             CategoryId = 1,
                             Name = "Cliffjumper"
                         },
                         new
                         {
-                            Guid = "d1abf070-a87f-4c0b-aa5f-f6a108e6ba87",
+                            Guid = "d5a1b9ce-3e63-4188-be5c-d3f640eded2e",
                             Alliance = "Decepticon",
                             CategoryId = 1,
                             Name = "Megatron"

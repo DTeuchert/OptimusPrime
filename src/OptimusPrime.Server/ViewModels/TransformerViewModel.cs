@@ -6,7 +6,7 @@ namespace OptimusPrime.Server.ViewModels
     {
         public string Guid { get; set; }
         public string Name { get; set; }
-        public Alliance Alicance { get; set; }
+        public Alliance Allicance { get; set; }
         public CategoryViewModel Category { get; set; }
 
     }
@@ -19,7 +19,7 @@ namespace OptimusPrime.Server.ViewModels
             {
                 Guid = x.Guid,
                 Name = x.Name,
-                Alicance = x.Alliance,
+                Allicance = x.Alliance,
                 Category = x.Category.ToViewModel() ?? new CategoryViewModel()
             };
         }

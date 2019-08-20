@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
@@ -20,6 +19,11 @@ namespace OptimusPrime.Server.Repositories
         public async Task<bool> ExistsAsync(string name)
         {
             return await _dbContext.Transformers.AnyAsync(x => x.Name == name);
+        }
+
+        public async Task<bool> ExistsCategoryAsync(int id)
+        {
+            return await _dbContext.Categories.AnyAsync(x => x.Id == id);
         }
 
         public async Task<IEnumerable<Transformer>> GetAllAsync()
@@ -59,7 +63,7 @@ namespace OptimusPrime.Server.Repositories
             if (transformer is null) { return; }
 
             if (transformer.Name != updatedTransformer.Name) transformer.Name = updatedTransformer.Name;
-            //if (transformer.Alliance != updatedTransformer.Alliance) transformer.Alliance = updatedTransformer.Alliance;
+            if (transformer.Alliance != updatedTransformer.Alliance) transformer.Alliance = updatedTransformer.Alliance;
             //if (transformer.CategoryId != updatedTransformer.CategoryId) transformer.CategoryId = updatedTransformer.CategoryId;
 
             await _dbContext.SaveChangesAsync();
