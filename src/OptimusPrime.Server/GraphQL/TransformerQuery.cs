@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Security.Claims;
 using GraphQL.Types;
+using OptimusPrime.Server.Entities;
 using OptimusPrime.Server.GraphQL.Types;
 using OptimusPrime.Server.Repositories;
 
@@ -30,7 +31,7 @@ namespace OptimusPrime.Server.GraphQL
                 {
                     new QueryArgument<IdGraphType> { Name = "guid" },
                     new QueryArgument<StringGraphType> { Name = "name" },
-                    //new QueryArgument<AllianceType> { Name = "alliance" }
+                    new QueryArgument<AllianceType> { Name = "alliance" }
                 }),
                 resolve: context =>
                 {
@@ -49,11 +50,11 @@ namespace OptimusPrime.Server.GraphQL
                         return transformerRepository.GetByNameAsync(transformerName);
                     }
 
-                    //var transformerAlliance = context.GetArgument<AllianceType>("alliance");
-                    //if (transformerAlliance != null)
-                    //{
-                    //    return transformerRepository.GetQuery().Where(x => x.Alliance == transformerAlliance.);
-                    //}
+                    var transformerAlliance = context.GetArgument<Alliance?>("alliance");
+                    if (transformerAlliance != null)
+                    {
+                        return transformerRepository.GetQuery().Where(x => x.Alliance == transformerAlliance);
+                    }
 
                     return transformerRepository.GetAllAsync();
                 }
