@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Query;
 using OptimusPrime.Server.Entities;
+using OptimusPrime.Server.Models;
 
 namespace OptimusPrime.Server.Repositories
 {
@@ -25,21 +26,21 @@ namespace OptimusPrime.Server.Repositories
         /// Return all transformers stored in the database.
         /// </summary>
         /// <returns>List of all stored transformer exists in the database.</returns>
-        Task<IEnumerable<Transformer>> GetAllAsync();
+        Task<IEnumerable<TransformerModel>> GetAllAsync();
 
         /// <summary>
         /// Return a transformers object identified by the guid.
         /// </summary>
         /// <param name="guid">Global unique identifier of the transformer</param>
         /// <returns>Transformer object with the associated id.</returns>
-        Task<Transformer> GetAsync(string guid);
+        Task<TransformerModel> GetAsync(string guid);
 
         /// <summary>
         /// Return a transformers object identified by its name.
         /// </summary>
         /// <param name="name">Name of the transformer</param>
         /// <returns>Transformer object with the name.</returns>
-        Task<Transformer> GetByNameAsync(string name);
+        Task<TransformerModel> GetByNameAsync(string name);
 
         /// <summary>
         /// Returns a Transformer query.
@@ -52,14 +53,14 @@ namespace OptimusPrime.Server.Repositories
         /// </summary>
         /// <param name="newTransformer">New transformer to store in the database</param>
         /// <returns></returns>
-        Task AddAsync(Transformer newTransformer);
+        Task AddAsync(TransformerModel newTransformer);
 
         /// <summary>
         /// Update a transformer object in the database.
         /// </summary>
         /// <param name="updatedTransformer">Updated transformer</param>
         /// <returns></returns>
-        Task UpdateAsync(Transformer updatedTransformer);
+        Task UpdateAsync(TransformerModel updatedTransformer);
 
         /// <summary>
         /// Deletes a transformer from the database.

@@ -1,4 +1,4 @@
-﻿using OptimusPrime.Server.Entities;
+﻿using OptimusPrime.Server.Models;
 
 namespace OptimusPrime.Server.ViewModels
 {
@@ -11,7 +11,7 @@ namespace OptimusPrime.Server.ViewModels
 
     public static class CategoryViewModelExtensions
     {
-        public static CategoryViewModel ToViewModel(this Category x)
+        public static CategoryViewModel ToViewModel(this CategoryModel x)
         {
             return new CategoryViewModel
             {

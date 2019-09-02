@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using OptimusPrime.Server.ViewModels;
-using OptimusPrime.Server.Entities;
+using OptimusPrime.Server.Models;
 using OptimusPrime.Server.Repositories;
-using System.Linq;
+using OptimusPrime.Server.ViewModels;
 
 namespace OptimusPrime.Server.Controllers
 {
@@ -29,12 +29,12 @@ namespace OptimusPrime.Server.Controllers
         }
 
         // GET api/values/5
-        [HttpGet("{guid}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<TransformerViewModel>> Get(string guid)
+        public async Task<ActionResult<TransformerViewModel>> Get(string id)
         {
-            var transformer = await _transformerRepository.GetAsync(guid);
+            var transformer = await _transformerRepository.GetAsync(id);
 
             if (transformer is null)
             {
@@ -50,29 +50,32 @@ namespace OptimusPrime.Server.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TransformerViewModel>> Create([FromBody] TransformerViewModel transformer)
         {
-            if(! await _transformerRepository.ExistsCategoryAsync(transformer.Category.Id))
+            if (!await _transformerRepository.ExistsCategoryAsync(transformer.Category.Id))
             {
                 return NotFound();
             }
 
-            await _transformerRepository.AddAsync(new Transformer
+            await _transformerRepository.AddAsync(new TransformerModel
             {
-                Guid = transformer.Guid,
+                Id = transformer.Id,
                 Name = transformer.Name,
                 Alliance = transformer.Allicance,
-                CategoryId = transformer.Category.Id
+                Category = new CategoryModel
+                {
+                    Id = transformer.Category.Id
+                }
             });
-            return CreatedAtAction(nameof(Get), new { transformer.Guid }, transformer);
+            return CreatedAtAction(nameof(Get), new { transformer.Id }, transformer);
         }
 
         // PUT api/values/5
-        [HttpPut("{guid}")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> Update(string guid, [FromBody] TransformerViewModel transformer)
+        public async Task<ActionResult> Update(string id, [FromBody] TransformerViewModel transformer)
         {
-            if (guid != transformer.Guid)
+            if (id != transformer.Id)
             {
                 return BadRequest();
             }
@@ -82,35 +85,38 @@ namespace OptimusPrime.Server.Controllers
                 return NotFound();
             }
 
-            var transformerModel = await _transformerRepository.GetAsync(guid);
+            var transformerModel = await _transformerRepository.GetAsync(id);
             if (transformerModel == null)
             {
                 return NotFound();
             }
 
-            await _transformerRepository.UpdateAsync(new Transformer
+            await _transformerRepository.UpdateAsync(new TransformerModel
             {
-                Guid = transformer.Guid,
+                Id = transformer.Id,
                 Name = transformer.Name,
                 Alliance = transformer.Allicance,
-                CategoryId = transformer.Category.Id
+                Category = new CategoryModel
+                {
+                    Id = transformer.Category.Id
+                }
             });
             return NoContent();
         }
 
         // DELETE api/values/5
-        [HttpDelete("{guid}")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Delete(string guid)
+        public async Task<IActionResult> Delete(string id)
         {
-            var transformer = await _transformerRepository.GetAsync(guid);
+            var transformer = await _transformerRepository.GetAsync(id);
             if (transformer == null)
             {
                 return NotFound();
             }
 
-            await _transformerRepository.DeleteAsync(transformer.Guid);
+            await _transformerRepository.DeleteAsync(transformer.Id);
             return NoContent();
         }
     }
