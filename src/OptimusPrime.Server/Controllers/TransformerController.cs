@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using OptimusPrime.Server.Models;
+using OptimusPrime.Server.Exceptions;
 using OptimusPrime.Server.Repositories;
+using OptimusPrime.Server.Transformers.Commands;
+using OptimusPrime.Server.Transformers.Queries;
 using OptimusPrime.Server.ViewModels;
 
 namespace OptimusPrime.Server.Controllers
@@ -14,33 +17,35 @@ namespace OptimusPrime.Server.Controllers
     public class TransformerController : ControllerBase
     {
         private readonly ITransformerRepository _transformerRepository;
+        private readonly IMediator _mediator;
 
-        public TransformerController(ITransformerRepository transformerRepository)
+        public TransformerController(IMediator mediator, ITransformerRepository repository)
         {
-            _transformerRepository = transformerRepository;
+            _transformerRepository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-        // GET api/values
+        // GET api/transformers
         [HttpGet]
-        public async Task<IEnumerable<TransformerViewModel>> Get()
+        public async Task<ActionResult<IEnumerable<TransformerViewModel>>> Get()
         {
-            return (await _transformerRepository.GetAllAsync())
-                .Select(transformer => transformer.ToViewModel());
+            return Ok(await _mediator.Send(new GetAllTransformersQuery()));
         }
 
-        // GET api/values/5
+        // GET api/transformers/5
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TransformerViewModel>> Get(string id)
         {
-            var transformer = await _transformerRepository.GetAsync(id);
-
-            if (transformer is null)
+            try
+            {
+                return Ok(await _mediator.Send(new GetTransformerQuery { Id = id }));
+            }
+            catch (NotFoundException)
             {
                 return NotFound();
             }
-            return transformer.ToViewModel();
         }
 
         // POST api/values
@@ -50,22 +55,20 @@ namespace OptimusPrime.Server.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TransformerViewModel>> Create([FromBody] TransformerViewModel transformer)
         {
-            if (!await _transformerRepository.ExistsCategoryAsync(transformer.Category.Id))
+            try
+            {
+                var id = await _mediator.Send(new CreateTransformerCommand
+                {
+                    Name = transformer.Name,
+                    Alliance = transformer.Allicance,
+                    CategoryId = transformer.Category?.Id ?? -1
+                });
+                return CreatedAtAction(nameof(Get), new { id });
+            }
+            catch (NotFoundException)
             {
                 return NotFound();
             }
-
-            await _transformerRepository.AddAsync(new TransformerModel
-            {
-                Id = transformer.Id,
-                Name = transformer.Name,
-                Alliance = transformer.Allicance,
-                Category = new CategoryModel
-                {
-                    Id = transformer.Category.Id
-                }
-            });
-            return CreatedAtAction(nameof(Get), new { transformer.Id }, transformer);
         }
 
         // PUT api/values/5
@@ -80,28 +83,21 @@ namespace OptimusPrime.Server.Controllers
                 return BadRequest();
             }
 
-            if (!await _transformerRepository.ExistsCategoryAsync(transformer.Category.Id))
+            try
             {
-                return NotFound();
-            }
-
-            var transformerModel = await _transformerRepository.GetAsync(id);
-            if (transformerModel == null)
-            {
-                return NotFound();
-            }
-
-            await _transformerRepository.UpdateAsync(new TransformerModel
-            {
-                Id = transformer.Id,
-                Name = transformer.Name,
-                Alliance = transformer.Allicance,
-                Category = new CategoryModel
+                await _mediator.Send(new UpdateTransformerCommand
                 {
-                    Id = transformer.Category.Id
-                }
-            });
-            return NoContent();
+                    Id = transformer.Id,
+                    Name = transformer.Name,
+                    Alliance = transformer.Allicance,
+                    CategoryId = transformer.Category?.Id ?? -1
+                });
+                return NoContent();
+            }
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
         }
 
         // DELETE api/values/5
@@ -110,14 +106,15 @@ namespace OptimusPrime.Server.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(string id)
         {
-            var transformer = await _transformerRepository.GetAsync(id);
-            if (transformer == null)
+            try
+            {
+                await _mediator.Send(new DeleteTransformerCommand { Id = id });
+                return NoContent();
+            }
+            catch (NotFoundException)
             {
                 return NotFound();
             }
-
-            await _transformerRepository.DeleteAsync(transformer.Id);
-            return NoContent();
         }
     }
 }

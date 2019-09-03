@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using GraphQL;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +17,8 @@ using Microsoft.OpenApi.Models;
 using OptimusPrime.Server.Configuration.Options;
 using OptimusPrime.Server.Extensions;
 using OptimusPrime.Server.GraphQL;
+using OptimusPrime.Server.Transformers.Commands;
+using OptimusPrime.Server.Transformers.Queries;
 
 namespace OptimusPrime.Server
 {
@@ -60,6 +64,9 @@ namespace OptimusPrime.Server
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OptimusPrime API", Version = "v1" });
             });
+
+            services.AddMediatR(typeof(TransformerQueryHandler).GetTypeInfo().Assembly);
+            services.AddMediatR(typeof(TransformerCommandHandler).GetTypeInfo().Assembly);
 
             services.AddScoped<Repositories.ITransformerRepository, Repositories.TransformerRepository>();
             services.AddScoped<Services.IPrimeService, Services.PrimeService>();

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
@@ -35,12 +37,12 @@ namespace OptimusPrime.Server.Repositories
 
         public async Task<TransformerModel> GetAsync(string guid)
         {
-            return (await GetQuery().SingleAsync(x => x.Guid == guid)).ToModel();
+            return (await GetQuery().FirstOrDefaultAsync(x => x.Guid == guid))?.ToModel();
         }
 
         public async Task<TransformerModel> GetByNameAsync(string name)
         {
-            return (await GetQuery().SingleAsync(x => x.Name == name)).ToModel();
+            return (await GetQuery().FirstOrDefaultAsync(x => x.Name == name))?.ToModel();
         }
 
         public IIncludableQueryable<Transformer, Category> GetQuery()
@@ -49,41 +51,40 @@ namespace OptimusPrime.Server.Repositories
                 .Include(t => t.Category);
         }
 
-        public async Task AddAsync(TransformerModel newTransformer)
+        public async Task<string> AddAsync(TransformerModel newTransformer, CancellationToken cancellationToken = default)
         {
-            var exists = await GetQuery().AnyAsync(i => i.Guid == newTransformer.Id);
-            if (!exists)
+            var transformer = new Transformer
             {
-                _dbContext.Transformers.Add(new Transformer
-                {
-                    Guid = newTransformer.Id,
-                    Name = newTransformer.Name,
-                    Alliance = newTransformer.Alliance,
-                    CategoryId = newTransformer.Category.Id
-                });
-                await _dbContext.SaveChangesAsync();
-            }
+                Guid = new Guid().ToString(),
+                Name = newTransformer.Name,
+                Alliance = newTransformer.Alliance,
+                CategoryId = newTransformer.Category.Id
+            };
+            _dbContext.Transformers.Add(transformer);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            return transformer.Guid;
         }
 
-        public async Task UpdateAsync(TransformerModel updatedTransformer)
+        public async Task UpdateAsync(TransformerModel updatedTransformer, CancellationToken cancellationToken = default)
         {
-            var transformer = await GetQuery().SingleAsync(x => x.Guid == updatedTransformer.Id);
+            var transformer = await GetQuery().SingleAsync(x => x.Guid == updatedTransformer.Id, cancellationToken);
             if (transformer is null) { return; }
 
             if (transformer.Name != updatedTransformer.Name) transformer.Name = updatedTransformer.Name;
             if (transformer.Alliance != updatedTransformer.Alliance) transformer.Alliance = updatedTransformer.Alliance;
             if (transformer.CategoryId != updatedTransformer.Category.Id) transformer.CategoryId = updatedTransformer.Category.Id;
 
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task DeleteAsync(string guid)
+        public async Task DeleteAsync(string guid, CancellationToken cancellationToken = default)
         {
-            var transformer = await GetQuery().SingleAsync(x => x.Guid == guid);
+            var transformer = await GetQuery().SingleAsync(x => x.Guid == guid, cancellationToken);
             if (transformer != null)
             {
                 _dbContext.Transformers.Remove(transformer);
-                await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync(cancellationToken);
             }
         }
     }

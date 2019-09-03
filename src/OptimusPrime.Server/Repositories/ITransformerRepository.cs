@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Query;
 using OptimusPrime.Server.Entities;
@@ -52,21 +53,25 @@ namespace OptimusPrime.Server.Repositories
         /// Add a transformer in the database.
         /// </summary>
         /// <param name="newTransformer">New transformer to store in the database</param>
+        /// <param name="cancellationToken">Cancel token </param>
         /// <returns></returns>
-        Task AddAsync(TransformerModel newTransformer);
+        Task<string> AddAsync(TransformerModel newTransformer, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Update a transformer object in the database.
         /// </summary>
         /// <param name="updatedTransformer">Updated transformer</param>
+        /// <param name="cancellationToken">Cancel token </param>
         /// <returns></returns>
-        Task UpdateAsync(TransformerModel updatedTransformer);
+        Task UpdateAsync(TransformerModel updatedTransformer, CancellationToken cancellationToken = default);
+
 
         /// <summary>
         /// Deletes a transformer from the database.
         /// </summary>
         /// <param name="guid">Global unique identifier of the transformer</param>
+        /// <param name="cancellationToken">Cancel token </param>
         /// <returns></returns>
-        Task DeleteAsync(string guid);
+        Task DeleteAsync(string guid, CancellationToken cancellationToken = default);
     }
 }
