@@ -50,6 +50,11 @@ namespace OptimusPrime.Server.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TransformerViewModel>> Create([FromBody] TransformerViewModel transformer)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (!await _transformerRepository.ExistsCategoryAsync(transformer.Category.Id))
             {
                 return NotFound();
@@ -75,7 +80,7 @@ namespace OptimusPrime.Server.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Update(string id, [FromBody] TransformerViewModel transformer)
         {
-            if (id != transformer.Id)
+            if (id != transformer.Id || !ModelState.IsValid)
             {
                 return BadRequest();
             }
@@ -85,8 +90,7 @@ namespace OptimusPrime.Server.Controllers
                 return NotFound();
             }
 
-            var transformerModel = await _transformerRepository.GetAsync(id);
-            if (transformerModel == null)
+            if (!await _transformerRepository.ExistsAsync(id))
             {
                 return NotFound();
             }
