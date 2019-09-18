@@ -24,7 +24,7 @@ namespace OptimusPrime.Server.Controllers
         [HttpGet]
         public async Task<IEnumerable<TransformerViewModel>> Get()
         {
-            return (await _transformerRepository.GetAllAsync())
+            return (await _transformerRepository.GetAsync())
                 .Select(transformer => transformer.ToViewModel());
         }
 

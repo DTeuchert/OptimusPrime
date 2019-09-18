@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Query;
 using OptimusPrime.Server.Entities;
+using OptimusPrime.Server.Internal.Transformers;
 using OptimusPrime.Server.Models;
 
 namespace OptimusPrime.Server.Repositories
@@ -23,12 +25,6 @@ namespace OptimusPrime.Server.Repositories
         Task<bool> ExistsCategoryAsync(int id);
 
         /// <summary>
-        /// Return all transformers stored in the database.
-        /// </summary>
-        /// <returns>List of all stored transformer exists in the database.</returns>
-        Task<IEnumerable<TransformerModel>> GetAllAsync();
-
-        /// <summary>
         /// Return a transformers object identified by the guid.
         /// </summary>
         /// <param name="guid">Global unique identifier of the transformer</param>
@@ -36,11 +32,12 @@ namespace OptimusPrime.Server.Repositories
         Task<TransformerModel> GetAsync(string guid);
 
         /// <summary>
-        /// Return a transformers object identified by its name.
+        /// Returns a list of transformer objects filtered by<see cref="OptimusPrime.Server.Internal.Transformers.TransformerQueryOption">.
+        /// When no filter options are set, the function will return all objects.
         /// </summary>
-        /// <param name="name">Name of the transformer</param>
-        /// <returns>Transformer object with the name.</returns>
-        Task<TransformerModel> GetByNameAsync(string name);
+        /// <param name="options">Filter options</param>
+        /// <returns>List of all stored transformers matching the filter options, exists in the database.</returns>
+        Task<IList<TransformerModel>> GetAsync(Action<TransformerQueryOption> options = null);
 
         /// <summary>
         /// Returns a Transformer query.

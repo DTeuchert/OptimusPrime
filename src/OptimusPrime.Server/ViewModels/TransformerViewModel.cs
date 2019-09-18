@@ -9,7 +9,6 @@ namespace OptimusPrime.Server.ViewModels
         public string Name { get; set; }
         public Alliance Allicance { get; set; }
         public CategoryViewModel Category { get; set; }
-
     }
 
     public static class TransformerViewModelExtensions
@@ -21,7 +20,7 @@ namespace OptimusPrime.Server.ViewModels
                 Id = x.Id,
                 Name = x.Name,
                 Allicance = x.Alliance,
-                Category = x.Category.ToViewModel() ?? new CategoryViewModel()
+                Category = x.Category?.ToViewModel() ?? new CategoryViewModel()
             };
         }
     }
