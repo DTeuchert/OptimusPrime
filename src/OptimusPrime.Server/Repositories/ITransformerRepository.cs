@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Query;
-using OptimusPrime.Server.Entities;
 using OptimusPrime.Server.Internal.Transformers;
 using OptimusPrime.Server.Models;
 
@@ -38,12 +36,6 @@ namespace OptimusPrime.Server.Repositories
         /// <param name="options">Filter options</param>
         /// <returns>List of all stored transformers matching the filter options, exists in the database.</returns>
         Task<IList<TransformerModel>> GetAsync(Action<TransformerQueryOption> options = null);
-
-        /// <summary>
-        /// Returns a Transformer query.
-        /// </summary>
-        /// <returns></returns>
-        IIncludableQueryable<Transformer, Category> GetQuery();
 
         /// <summary>
         /// Add a transformer in the database.

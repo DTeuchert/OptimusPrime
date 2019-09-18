@@ -22,6 +22,16 @@ namespace OptimusPrime.Server.Repositories
             _queryBuilder = new TransformerQueryBuilder();
         }
 
+        /// <summary>
+        /// Returns a Transformer query with all includings.
+        /// </summary>
+        /// <returns></returns>
+        private IIncludableQueryable<Transformer, Category> GetQuery()
+        {
+            return _dbContext.Transformers
+                .Include(t => t.Category);
+        }
+
         public async Task<bool> ExistsAsync(string name)
         {
             return await _dbContext.Transformers.AnyAsync(x => x.Name == name);
@@ -44,17 +54,6 @@ namespace OptimusPrime.Server.Repositories
 
             var query = _queryBuilder.Build(GetQuery(), queryOptions);
             return (await query.ToListAsync()).Select(t => t.ToModel()).ToList();
-        }
-
-        public async Task<TransformerModel> GetByNameAsync(string name)
-        {
-            return (await GetQuery().SingleAsync(x => x.Name == name)).ToModel();
-        }
-
-        public IIncludableQueryable<Transformer, Category> GetQuery()
-        {
-            return _dbContext.Transformers
-                .Include(t => t.Category);
         }
 
         public async Task AddAsync(TransformerModel newTransformer)
