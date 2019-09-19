@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using OptimusPrime.Server.Entities;
+using OptimusPrime.Server.Internal;
 using OptimusPrime.Server.Internal.Transformers;
 using OptimusPrime.Server.Models;
 using OptimusPrime.Server.Persistences;
@@ -56,42 +57,122 @@ namespace OptimusPrime.Server.Repositories
             return (await query.ToListAsync()).Select(t => t.ToModel()).ToList();
         }
 
-        public async Task AddAsync(TransformerModel newTransformer)
+        public async Task<ResultModel<TransformerModel>> AddAsync(TransformerModel newTransformer)
         {
-            var exists = await GetQuery().AnyAsync(i => i.Guid == newTransformer.Id);
-            if (!exists)
+            if (newTransformer.Category is null)
             {
-                _dbContext.Transformers.Add(new Transformer
+                return new ResultModel<TransformerModel>
                 {
-                    Guid = newTransformer.Id,
-                    Name = newTransformer.Name,
-                    Alliance = newTransformer.Alliance,
-                    CategoryId = newTransformer.Category.Id
-                });
-                await _dbContext.SaveChangesAsync();
+                    Message = $"Category need to be set."
+                };
+            }
+            if (! await _dbContext.Categories.AnyAsync( c => c.Id == newTransformer.Category.Id))
+            {
+                return new ResultModel<TransformerModel>
+                {
+                    Message = $"Invalid category id: {newTransformer.Category.Id}"
+                };
+            }
+            if (await ExistsAsync(newTransformer.Id))
+            {
+                return new ResultModel<TransformerModel>
+                {
+                    Message = $"Transformer entity with the id {newTransformer.Category.Id} already exists."
+                };
+            }
+
+            var transformer = new Transformer
+            {
+                Guid = newTransformer.Id,
+                Name = newTransformer.Name,
+                Alliance = newTransformer.Alliance,
+                CategoryId = newTransformer.Category.Id
+            };
+            _dbContext.Transformers.Add(transformer);
+
+            try
+            {
+                var changedObjects = await _dbContext.SaveChangesAsync();
+                return new ResultModel<TransformerModel>
+                {
+                    IsSuccess = changedObjects > 0,
+                    Message = $"{changedObjects} objects changed.",
+                    Value = transformer.ToModel()
+                };
+            }
+            catch (Exception e)
+            {
+                return new ResultModel<TransformerModel>
+                {
+                    Message = $"Failed to add transformer entity in the database. {e.Message}"
+                };
             }
         }
 
-        public async Task UpdateAsync(TransformerModel updatedTransformer)
+        public async Task<ResultModel<TransformerModel>> UpdateAsync(TransformerModel updatedTransformer)
         {
             var transformer = await GetQuery().SingleAsync(x => x.Guid == updatedTransformer.Id);
-            if (transformer is null) { return; }
+            if (transformer is null)
+            {
+                return new ResultModel<TransformerModel>
+                {
+                    Message = $"Transformer entity with the id {updatedTransformer.Id} does not exists."
+                };
+            }
 
             if (transformer.Name != updatedTransformer.Name) transformer.Name = updatedTransformer.Name;
             if (transformer.Alliance != updatedTransformer.Alliance) transformer.Alliance = updatedTransformer.Alliance;
-            if (transformer.CategoryId != updatedTransformer.Category.Id) transformer.CategoryId = updatedTransformer.Category.Id;
+            if (transformer.CategoryId != updatedTransformer?.Category.Id) transformer.CategoryId = updatedTransformer.Category.Id;
 
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                var changedObjects = await _dbContext.SaveChangesAsync();
+                return new ResultModel<TransformerModel>
+                {
+                    IsSuccess = changedObjects > 0,
+                    Message = $"{changedObjects} objects changed.",
+                    Value = transformer.ToModel()
+                };
+            }
+            catch (Exception e)
+            {
+                return new ResultModel<TransformerModel>
+                {
+                    Message = $"Failed to update transformer entity in the database. {e.Message}"
+                };
+            }
         }
 
-        public async Task DeleteAsync(string guid)
+        public async Task<ResultModel<TransformerModel>> DeleteAsync(string guid)
         {
             var transformer = await GetQuery().SingleAsync(x => x.Guid == guid);
-            if (transformer != null)
+            if (transformer is null)
             {
-                _dbContext.Transformers.Remove(transformer);
-                await _dbContext.SaveChangesAsync();
+                return new ResultModel<TransformerModel>
+                {
+                    Message = $"Transformer entity with the id {guid} does not exists."
+                };
             }
+
+            _dbContext.Transformers.Remove(transformer);
+
+            try
+            {
+                var changedObjects = await _dbContext.SaveChangesAsync();
+                return new ResultModel<TransformerModel>
+                {
+                    IsSuccess = changedObjects > 0,
+                    Message = $"{changedObjects} objects changed."
+                };
+            }
+            catch (Exception e)
+            {
+                return new ResultModel<TransformerModel>
+                {
+                    Message = $"Failed to delete transformer entity from the database. {e.Message}"
+                };
+            }
+
         }
     }
 }

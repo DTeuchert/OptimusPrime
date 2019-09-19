@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using OptimusPrime.Server.Internal;
 using OptimusPrime.Server.Internal.Transformers;
 using OptimusPrime.Server.Models;
 
@@ -42,20 +43,20 @@ namespace OptimusPrime.Server.Repositories
         /// </summary>
         /// <param name="newTransformer">New transformer to store in the database</param>
         /// <returns></returns>
-        Task AddAsync(TransformerModel newTransformer);
+        Task<ResultModel<TransformerModel>> AddAsync(TransformerModel newTransformer);
 
         /// <summary>
         /// Update a transformer object in the database.
         /// </summary>
         /// <param name="updatedTransformer">Updated transformer</param>
         /// <returns></returns>
-        Task UpdateAsync(TransformerModel updatedTransformer);
+        Task<ResultModel<TransformerModel>> UpdateAsync(TransformerModel updatedTransformer);
 
         /// <summary>
         /// Deletes a transformer from the database.
         /// </summary>
         /// <param name="guid">Global unique identifier of the transformer</param>
         /// <returns></returns>
-        Task DeleteAsync(string guid);
+        Task<ResultModel<TransformerModel>> DeleteAsync(string guid);
     }
 }
