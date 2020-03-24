@@ -39,23 +39,23 @@ namespace OptimusPrime.Server.GraphQL
                     var user = (ClaimsPrincipal)context.UserContext;
                     var isUserAuthenticated = ((ClaimsIdentity)user.Identity).IsAuthenticated;
 
-                    var transformerGuid = context.GetArgument<string>("guid");
-                    if (!string.IsNullOrEmpty(transformerGuid))
-                    {
-                        return transformerRepository.GetAsync(transformerGuid);
-                    }
+                    //var transformerGuid = context.GetArgument<string>("guid");
+                    //if (!string.IsNullOrEmpty(transformerGuid))
+                    //{
+                    //    return transformerRepository.GetAsync(transformerGuid);
+                    //}
 
-                    var transformerName = context.GetArgument<string>("name");
-                    if (!string.IsNullOrEmpty(transformerName))
-                    {
-                        return transformerRepository.GetAsync(t => t.Name = transformerName);
-                    }
+                    //var transformerName = context.GetArgument<string>("name");
+                    //if (!string.IsNullOrEmpty(transformerName))
+                    //{
+                    //    return transformerRepository.GetAsync(t => t.Name = transformerName);
+                    //}
 
-                    var transformerAlliance = context.GetArgument<Alliance?>("alliance");
-                    if (transformerAlliance != null)
-                    {
-                        return transformerRepository.GetAsync(t => t.Alliance = transformerAlliance);
-                    }
+                    //var transformerAlliance = context.GetArgument<Alliance?>("alliance");
+                    //if (transformerAlliance != null)
+                    //{
+                    //    return transformerRepository.GetAsync(t => t.Alliance = transformerAlliance);
+                    //}
 
                     return transformerRepository.GetAsync();
                 }

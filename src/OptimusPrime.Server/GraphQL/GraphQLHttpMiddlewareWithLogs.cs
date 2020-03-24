@@ -1,0 +1,51 @@
+﻿using System;
+
+using GraphQL.Server.Common;
+using GraphQL.Server.Transports.AspNetCore;
+using GraphQL.Server.Transports.AspNetCore.Common;
+using GraphQL.Types;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace OptimusPrime.Server.GraphQL
+{
+    public class GraphQLHttpMiddlewareWithLogs<TSchema> : GraphQLHttpMiddleware<TSchema>
+        where TSchema : ISchema
+    {
+        private readonly ILogger _logger;
+
+        public GraphQLHttpMiddlewareWithLogs(
+            ILogger<GraphQLHttpMiddleware<TSchema>> logger,
+            RequestDelegate next,
+            PathString path,
+            IGraphQLRequestDeserializer requestDeserializer)
+            : base(next, path, requestDeserializer)
+        {
+            _logger = logger;
+        }
+
+        protected override Task RequestExecutedAsync(in GraphQLRequestExecutionResult requestExecutionResult)
+        {
+            if (requestExecutionResult.Result.Errors != null)
+            {
+                if (requestExecutionResult.IndexInBatch.HasValue)
+                    _logger.LogError("GraphQL execution completed in {Elapsed} with error(s) in batch [{Index}]: {Errors}", requestExecutionResult.Elapsed, requestExecutionResult.IndexInBatch, requestExecutionResult.Result.Errors);
+                else
+                    _logger.LogError("GraphQL execution completed in {Elapsed} with error(s): {Errors}", requestExecutionResult.Elapsed, requestExecutionResult.Result.Errors);
+            }
+            else
+                _logger.LogInformation("GraphQL execution successfully completed in {Elapsed}", requestExecutionResult.Elapsed);
+
+            return base.RequestExecutedAsync(requestExecutionResult);
+        }
+
+        protected override CancellationToken GetCancellationToken(HttpContext context)
+        {
+            // custom CancellationToken example 
+            var cts = CancellationTokenSource.CreateLinkedTokenSource(base.GetCancellationToken(context), new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+            return cts.Token;
+        }
+    }
+}
