@@ -16,6 +16,7 @@ using Microsoft.OpenApi.Models;
 using OptimusPrime.Server.Configuration.Options;
 using OptimusPrime.Server.Extensions;
 using OptimusPrime.Server.GraphQL;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace OptimusPrime.Server
 {
@@ -47,20 +48,24 @@ namespace OptimusPrime.Server
             #endregion
 
             #region GraphQL
-            //// services.AddScoped<IDependencyResolver>(x => new FuncDependencyResolver(x.GetRequiredService));
-            //services.AddScoped<OptimusPrimeSchema>();
-            //services.AddGraphQL(option =>
-            //    {
-            //        option.ExposeExceptions = Environment.IsDevelopment();
-            //        option.EnableMetrics = Environment.IsDevelopment();
+            services.AddScoped<IDependencyResolver>(x => new FuncDependencyResolver(x.GetRequiredService));
+            services.AddScoped<OptimusPrimeSchema>();
+            services.AddGraphQL(option =>
+                {
+                   option.ExposeExceptions = Environment.IsDevelopment();
+                   option.EnableMetrics = Environment.IsDevelopment();
 
-            //    })
-            //    //.AddSystemTextJson(deserializerSettings => { }, serializerSettings => { })
-            //    .AddGraphTypes(ServiceLifetime.Scoped)
-            //    //‚.AddUserContextBuilder(httpContext => httpContext.User)
-            //    .AddDataLoader();
+                })
+                .AddGraphTypes(ServiceLifetime.Scoped)
+                .AddUserContextBuilder(httpContext => httpContext.User)
+                .AddDataLoader();
+
+            services.Configure<KestrelServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
             #endregion
-            
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OptimusPrime API", Version = "v1" });
@@ -109,8 +114,8 @@ namespace OptimusPrime.Server
             #endregion
 
             #region GraphQL
-            //app.UseGraphQL<OptimusPrimeSchema, GraphQLHttpMiddlewareWithLogs<OptimusPrimeSchema>>("/graphql");
-            //app.UseGraphQLPlayground(new GraphQLPlaygroundOptions()); //to explorer API navigate https://*DOMAIN*/ui/playground
+            app.UseGraphQL<OptimusPrimeSchema>("/graphql");
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions()); //to explorer API navigate https://*DOMAIN*/ui/playground
             #endregion
 
             app.UseSwagger();

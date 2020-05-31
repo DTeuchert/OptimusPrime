@@ -1,14 +1,13 @@
-﻿using GraphQL.Types;
-using System;
-using OptimusPrime.Server.Repositories;
+﻿using GraphQL;
+using GraphQL.Types;
 
 namespace OptimusPrime.Server.GraphQL
 {
     public class OptimusPrimeSchema : Schema
     {
-        public OptimusPrimeSchema(ITransformerRepository transformerRepository, IServiceProvider provider) : base(provider)
+        public OptimusPrimeSchema(IDependencyResolver resolver) : base(resolver)
         {
-            Query = new TransformerQuery(transformerRepository);
+            Query = resolver.Resolve<TransformerQuery>();
         }
     }
 }
