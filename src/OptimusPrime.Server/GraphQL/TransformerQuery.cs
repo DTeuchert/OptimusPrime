@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using GraphQL.Types;
 using OptimusPrime.Server.Entities;
 using OptimusPrime.Server.GraphQL.Types;
-using OptimusPrime.Server.Internal.Transformers;
 using OptimusPrime.Server.Repositories;
 
 namespace OptimusPrime.Server.GraphQL
@@ -12,9 +9,9 @@ namespace OptimusPrime.Server.GraphQL
     public class TransformerQuery : ObjectGraphType
     {
         /* --- Simple test query
-         query TestQuery {
+         query TransformerQuery {
             transformers {
-                guid, 
+                id, 
                 name, 
                 alliance, 
                 category {
@@ -30,19 +27,19 @@ namespace OptimusPrime.Server.GraphQL
                 "transformers",
                 arguments: new QueryArguments(new List<QueryArgument>
                 {
-                    new QueryArgument<IdGraphType> { Name = "guid" },
+                    new QueryArgument<IdGraphType> { Name = "id" },
                     new QueryArgument<StringGraphType> { Name = "name" },
                     new QueryArgument<AllianceType> { Name = "alliance" }
                 }),
                 resolve: context =>
                 {
-                    var user = (ClaimsPrincipal)context.UserContext;
-                    var isUserAuthenticated = ((ClaimsIdentity)user.Identity).IsAuthenticated;
+                    //var user = (ClaimsPrincipal)context.UserContext;
+                    //var isUserAuthenticated = ((ClaimsIdentity)user.Identity).IsAuthenticated;
 
-                    var transformerGuid = context.GetArgument<string>("guid");
-                    if (!string.IsNullOrEmpty(transformerGuid))
+                    var transformerId = context.GetArgument<string>("id");
+                    if (!string.IsNullOrEmpty(transformerId))
                     {
-                        return transformerRepository.GetAsync(transformerGuid);
+                        return transformerRepository.GetAsync(t => t.Id = transformerId);
                     }
 
                     var transformerName = context.GetArgument<string>("name");
@@ -56,7 +53,6 @@ namespace OptimusPrime.Server.GraphQL
                     {
                         return transformerRepository.GetAsync(t => t.Alliance = transformerAlliance);
                     }
-
                     return transformerRepository.GetAsync();
                 }
             );

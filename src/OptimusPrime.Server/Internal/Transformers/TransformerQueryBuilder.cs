@@ -7,6 +7,11 @@ namespace OptimusPrime.Server.Internal.Transformers
     {
         public override IQueryable<Transformer> Build(IQueryable<Transformer> query, TransformerQueryOption options)
         {
+            if (!string.IsNullOrEmpty(options.Id))
+            {
+                query = query.Where(transformer => transformer.Guid == options.Id);
+            }
+
             if (!string.IsNullOrEmpty(options.Name))
             {
                 query = query.Where(transformer => transformer.Name == options.Name);

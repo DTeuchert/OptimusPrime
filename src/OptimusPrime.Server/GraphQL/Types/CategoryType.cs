@@ -1,9 +1,9 @@
 ﻿using GraphQL.Types;
-using OptimusPrime.Server.Entities;
+using OptimusPrime.Server.Models;
 
 namespace OptimusPrime.Server.GraphQL.Types
 {
-    public class CategoryType : ObjectGraphType<Category>
+    public class CategoryType : ObjectGraphType<CategoryModel>
     {
         public CategoryType()
         {

@@ -20,7 +20,7 @@ namespace OptimusPrime.Server.Controllers
             _transformerRepository = transformerRepository;
         }
 
-        // GET api/values
+        // GET api/transformer
         [HttpGet]
         public async Task<IEnumerable<TransformerViewModel>> Get()
         {
@@ -28,7 +28,7 @@ namespace OptimusPrime.Server.Controllers
                 .Select(transformer => transformer.ToViewModel());
         }
 
-        // GET api/values/5
+        // GET api/transformer/id
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -43,7 +43,7 @@ namespace OptimusPrime.Server.Controllers
             return transformer.ToViewModel();
         }
 
-        // POST api/values
+        // POST api/transformer
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -73,7 +73,7 @@ namespace OptimusPrime.Server.Controllers
             return CreatedAtAction(nameof(Get), new { transformer.Id }, transformer);
         }
 
-        // PUT api/values/5
+        // PUT api/transformer/id
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -108,7 +108,7 @@ namespace OptimusPrime.Server.Controllers
             return NoContent();
         }
 
-        // DELETE api/values/5
+        // DELETE api/transformer/id
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
