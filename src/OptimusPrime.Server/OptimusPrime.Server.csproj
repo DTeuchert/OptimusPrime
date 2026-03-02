@@ -22,7 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Transformers\" />
+    <Folder Include="ViewModels\" />
   </ItemGroup>
 
 </Project>
