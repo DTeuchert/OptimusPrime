@@ -1,0 +1,11 @@
+namespace OptimusPrime.Domain.Abstractions;
+
+public interface IRepository<T, TS> where T : AggregateRoot<TS>
+{
+    Task<bool> ExistsAsync(TS id, CancellationToken cancellationToken = default);
+    Task<T?> GetByIdAsync(TS id, CancellationToken cancellationToken = default);
+    
+    Task<TS> AddAsync(T model, CancellationToken cancellationToken = default);
+    Task UpdateAsync(T model, CancellationToken cancellationToken = default);
+    Task DeleteAsync(TS id, CancellationToken cancellationToken = default);
+}
