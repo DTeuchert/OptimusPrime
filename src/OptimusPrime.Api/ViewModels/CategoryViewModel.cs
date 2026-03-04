@@ -1,21 +1,16 @@
-﻿using OptimusPrime.Api.ViewModels;
-using OptimusPrime.Domain.Models;
+﻿using OptimusPrime.Domain.Models;
 
 namespace OptimusPrime.Api.ViewModels;
 public class CategoryViewModel
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public string Name { get; set; }
 }
 
 public static class CategoryViewModelExtensions
 {
-    public static CategoryViewModel ToViewModel(this Category x)
+    extension(Category category)
     {
-        return new CategoryViewModel
-        {
-            Id = x.Id,
-            Name = x.Name,
-        };
+        public CategoryViewModel ToViewModel() => new () { Id = category.Id, Name = category.Name };
     }
 }

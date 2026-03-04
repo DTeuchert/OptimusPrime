@@ -1,5 +1,5 @@
-﻿using MediatR;
-using OptimusPrime.Server.ViewModels;
+﻿using Mediator;
+using OptimusPrime.Domain.Models;
 
 namespace OptimusPrime.Api.Application.Queries;
-public record GetTransformerByIdQuery(Guid Id) : IRequest<TransformerViewModel>;
+public record GetTransformerByIdQuery(Guid Id) : IRequest<Transformer>;

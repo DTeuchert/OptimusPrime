@@ -1,7 +1,5 @@
-﻿namespace OptimusPrime.Domain.Models;
+﻿using OptimusPrime.Domain.Abstractions;
 
-public class Category
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-}
+namespace OptimusPrime.Domain.Models;
+
+public record Category(Guid Id, string Name) : DomainEntity<Guid>(Id);

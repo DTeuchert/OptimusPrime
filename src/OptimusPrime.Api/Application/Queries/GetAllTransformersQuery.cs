@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using MediatR;
-using OptimusPrime.Server.ViewModels;
+﻿using Mediator;
+using OptimusPrime.Domain.Models;
 
 namespace OptimusPrime.Api.Application.Queries;
-public record GetAllTransformersQuery : IRequest<IEnumerable<TransformerViewModel>>;
+public record GetAllTransformersQuery : IRequest<IEnumerable<Transformer>>;

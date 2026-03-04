@@ -16,10 +16,10 @@ public class TransformerConfiguration : IEntityTypeConfiguration<Transformer>
             .IsRequired()
             .HasMaxLength(64);
 
-        builder.Property(t => t.Alliance)
-            .HasConversion(new ValueConverter<Alliance, string>(
-                vc => vc.ToString(),
-                vc => (Alliance)Enum.Parse(typeof(Alliance), vc)));
+        // builder.Property(t => t.Alliance)
+        //     .HasConversion(new ValueConverter<Alliance, string>(
+        //         vc => vc.ToString(),
+        //         vc => (Alliance)Enum.Parse(typeof(Alliance), vc)));
 
         builder.HasOne(t => t.Category)
             .WithMany(c => c.Transformers)

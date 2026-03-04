@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 
-namespace OptimusPrime.Api.Application.Commands
-public record DeleteTransformerCommand(string Id) : IRequest;
+namespace OptimusPrime.Api.Application.Commands;
+public record DeleteTransformerCommand(Guid Id) : IRequest;

@@ -1,7 +1,6 @@
 ﻿using OptimusPrime.Domain.Models;
 
-namespace OptimusPrime.Api.ViewModels
-{
+namespace OptimusPrime.Api.ViewModels;
     public class TransformerViewModel
     {
         public Guid Id { get; set; }
@@ -13,15 +12,14 @@ namespace OptimusPrime.Api.ViewModels
 
     public static class TransformerViewModelExtensions
     {
-        public static TransformerViewModel ToViewModel(this Transformer x)
+        extension(Transformer transformer)
         {
-            return new TransformerViewModel
+            public TransformerViewModel ToViewModel() => new()
             {
-                Id = x.Id,
-                Name = x.Name,
-                Allicance = x.Alliance,
-                Category = x.Category.ToViewModel()
+                Id = transformer.Id,
+                Name = transformer.Name,
+                Allicance = transformer.Alliance,
+                Category = transformer.Category.ToViewModel()
             };
         }
     }
-}
