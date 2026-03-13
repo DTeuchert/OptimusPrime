@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using OptimusPrime.Infrastructure.Persistence.Options;
+
 namespace OptimusPrime.Api.Extensions;
 
 public static partial class ServiceCollectionExtensions
@@ -12,14 +15,13 @@ public static partial class ServiceCollectionExtensions
             throw new InvalidOperationException($"Unsupported database configuration");
         }
 
-        services.AddDbContext<Persistence.OptimusPrimeDbContext>((options) =>
+        services.AddDbContext<Infrastructure.Persistence.OptimusPrimeDbContext>((options) =>
         {
             var provider = databaseOptions.Provider.Name;
             if (provider == Provider.Sqlite.Name)
             {
                 options.UseSqlite(
-                    configuration.GetConnectionString(Provider.Sqlite.Name)!,
-                    sqliteOptions => sqliteOptions.MigrationsAssembly(Provider.Sqlite.Assembly)
+                    configuration.GetConnectionString(Provider.Sqlite.Name)!
                 );
             }
             else

@@ -1,6 +1,6 @@
-@OptimusPrime.Api_HostAddress = http://localhost:5132
+@OptimusPrime.Api_HostAddress = http://localhost:5048
 
-GET {{OptimusPrime.Api_HostAddress}}/weatherforecast/
+GET {{OptimusPrime.Api_HostAddress}}/api/transformer/
 Accept: application/json
 
 ###

@@ -1,3 +1,5 @@
+using OptimusPrime.Infrastructure.Persistence.Options;
+
 namespace OptimusPrime.Api.Extensions;
 
 public static partial class ServiceCollectionExtensions

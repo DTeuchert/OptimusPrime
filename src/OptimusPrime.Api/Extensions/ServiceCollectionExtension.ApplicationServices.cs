@@ -1,3 +1,6 @@
+using OptimusPrime.Domain.Repositories;
+using OptimusPrime.Infrastructure.Repositories;
+
 namespace OptimusPrime.Api.Extensions;
 
 public static partial class ServiceCollectionExtensions
